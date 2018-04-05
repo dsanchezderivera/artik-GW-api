@@ -1,0 +1,18 @@
+{
+  "name": "artik-gw-api",
+  "version": "0.1.0",
+  "description": "Artik 5 IoT Gateway api",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "Diego S.",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "morgan": "^1.9.0",
+    "nodemon": "^1.17.3"
+  }
+}
