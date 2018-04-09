@@ -31,7 +31,8 @@ exports.devices_get_all = (req, res, next) => {
 		btScan()
 		.then(result => {
 			waiting = false;
-			res.status(200).send("LIST ALL DEVICES OK - Result: "+ result);
+			console.log (result);
+			res.status(200).json(result);
 		})
 		.catch(err => {
 			waiting = false;
