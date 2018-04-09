@@ -8,7 +8,7 @@ const DevicesController = require('../controllers/devices.js');
 router.get('/', DevicesController.devices_get_all);
 
 /* API PUT */
-/* USAGE /?mac=91:75:1a:ec:9a:c7*/
+/* USAGE /?mac=3DF2C9A6B34F*/
 router.put('/?*', DevicesController.device_update);
 
 module.exports = router;
