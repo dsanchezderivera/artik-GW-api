@@ -3,10 +3,9 @@ var app = express();
 const morgan = require('morgan');
 var bodyParser = require("body-parser");
 
-
 //Routes
 const statusRoutes = require('./api/routes/status');
-
+const devicesRoutes = require('./api/routes/devices');
 
 //Add-ons
 app.use(morgan('dev')); // logger
@@ -16,6 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes which should handle requests
 app.use('/status', statusRoutes);
+app.use('/devices', devicesRoutes);
 
 //CORS
 app.use((req, res, next) => {
@@ -40,6 +40,7 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
+  console.log(err);
   res.status(err.status || 500);
   res.json({
     error: {
@@ -47,7 +48,6 @@ app.use((err, req, res, next) => {
     }
   });
 });
-
 
 //Server
 var server = app.listen(5000, function () {
