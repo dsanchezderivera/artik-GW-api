@@ -9,6 +9,9 @@ const imageProc = require('../../helpers/imageProc.js');
 var folder = './Uploads/';
 var fileName = 'image.bmp';
 
+//MAC Validation
+var macRegex = RegExp(/^([0-9A-F]{2}){6}$/);
+
 //BLocking
 var waiting = false;
 
@@ -32,12 +35,10 @@ exports.devices_get_all = (req, res, next) => {
 		btScan()
 		.then(result => {
 			waiting = false;
-			console.log (result);
 			res.status(200).json(result);
 		})
 		.catch(err => {
 			waiting = false;
-	      	console.log(err);
 	      	res.status(500).json({
 	        	message: 'Internal Server Error',
 	        	error: err
@@ -45,8 +46,7 @@ exports.devices_get_all = (req, res, next) => {
 	    });
 	}else{
 		console.log('Waiting for another request to finish');
-	    res.status(err.status || 500);
-	    res.json({
+	    res.status(err.status || 500).json({
 	      error: {
 	        message: err.message,
 	      }
@@ -60,10 +60,9 @@ exports.device_update = (req, res, next) => {
 		waiting = true;
 		let mac = req.query.mac;
 		//Check MAC format
-		if(!/^([0-9A-F]{2}){6}$/.test(mac)){
-			res.status(400).json({
-		        message: 'Bad format: '+ mac
-		   	});
+		if(!macRegex.test(mac)){
+			waiting = false;
+			res.status(400).json({message: 'Bad format: '+ mac});
 		   	return
 		}
 		//Save uploaded image
@@ -102,7 +101,6 @@ exports.device_update = (req, res, next) => {
 				   	});
 				})
 				.catch(err => {
-			      	console.log(err);
 			      	waiting = false;
 			      	res.status(500).json({
 			        	message: 'Internal Server Error',
@@ -112,7 +110,6 @@ exports.device_update = (req, res, next) => {
 	    		
 			})
 			.catch(err => {
-			      	console.log(err);
 			      	waiting = false;
 			      	res.status(500).json({
 			        	message: 'Internal Server Error',
@@ -121,13 +118,8 @@ exports.device_update = (req, res, next) => {
 			    });
 	    	
 		});
-	}else{
+	} else {
 		console.log('Waiting for another request to finish');
-	    res.status(500);
-	    res.json({
-	      error: {
-	        message: 'Waiting for another request to finish'
-	      }
-	    });
-	}	  	
+	    res.status(500).json({error:'Waiting for another request to finish'});
+	}  	
 }
