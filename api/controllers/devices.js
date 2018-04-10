@@ -3,6 +3,7 @@ var fs = require('fs');
 
 const btScan = require('../../calls/btScan.js');
 const updateDevice = require('../../calls/updateDevice.js');
+const imageProc = require('../../helpers/imageProc.js');
 
 //Paths
 var folder = './Uploads/';
@@ -77,8 +78,19 @@ exports.device_update = (req, res, next) => {
 	   			return
 		    }
 		    //Check image
-		    if(fs.existsSync(folder+fileName)){
-		    	console.log('External update starts');
+		    if(!fs.existsSync(folder+fileName)){
+		    	waiting = false;
+				console.log('error:'+err);
+				res.status(400).json({
+			        message: 'Image format not valid',
+			        error: err
+	   			});
+	   			return
+	   		}
+	   		//Image Processing
+	   		imageProc(folder+fileName, 296, 128)
+	   		.then(ok => {
+	   			console.log('External update starts');
 		    	//Call external program to update device
 		    	updateDevice(mac, folder+fileName)
 		    	.then(result => {
@@ -97,7 +109,17 @@ exports.device_update = (req, res, next) => {
 			        	error: err
 			      	});
 			    });
-		    }
+	    		
+			})
+			.catch(err => {
+			      	console.log(err);
+			      	waiting = false;
+			      	res.status(500).json({
+			        	message: 'Internal Server Error',
+			        	error: err
+			      	});
+			    });
+	    	
 		});
 	}else{
 		console.log('Waiting for another request to finish');
