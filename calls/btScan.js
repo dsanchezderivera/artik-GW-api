@@ -5,7 +5,7 @@ const { execFile } = require('child_process');
 function scanBT() {
     return new Promise(function(resolve, reject) {
     	//Execution of external call
-         execFile('ping', ['8.8.8.8'], (error, stdout, stderr) => {
+         execFile('node', ['--version'], (error, stdout, stderr) => {
 		  if (error) {
 		  	reject(error);
 		  }

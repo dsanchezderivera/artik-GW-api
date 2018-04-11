@@ -5,7 +5,7 @@ const { execFile } = require('child_process');
 function update(mac, image) {
     return new Promise(function(resolve, reject) {
     	//Dummy-Printing node version
-        execFile('ping', ['8.8.8.8'], (error, stdout, stderr) => {
+        execFile('node', ['--version'], (error, stdout, stderr) => {
 			if (error) reject(error);
 		 	resolve(stdout);
 		});
