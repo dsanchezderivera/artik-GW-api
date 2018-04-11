@@ -25,7 +25,14 @@ var Storage = multer.diskStorage({
     } 
 }); 
 
-var upload = multer({ storage: Storage }).single('image'); 
+//Storage and filter by filename
+var upload = multer({ 
+	storage: Storage,
+	fileFilter: function (req, file, callback) {
+        if(!file.originalname == fileName) return callback(new Error('Image not found/Bad filename'))
+        callback(null, true)
+    }
+}).single('image'); 
 
 /* GET */
 exports.devices_get_all = (req, res, next) => {
@@ -39,18 +46,11 @@ exports.devices_get_all = (req, res, next) => {
 		})
 		.catch(err => {
 			waiting = false;
-	      	res.status(500).json({
-	        	message: 'Internal Server Error',
-	        	error: err
-	      	});
+			res.status(500).json({error: {message: err.message}});
 	    });
 	}else{
 		console.log('Waiting for another request to finish');
-	    res.status(err.status || 500).json({
-	      error: {
-	        message: err.message,
-	      }
-	    });
+	    res.status(500).json({error: {message: 'Waiting for another request to finish'}});
 	}
 }
 
@@ -62,7 +62,7 @@ exports.device_update = (req, res, next) => {
 		//Check MAC format
 		if(!macRegex.test(mac)){
 			waiting = false;
-			res.status(400).json({message: 'Bad format: '+ mac});
+			res.status(400).json({error: {message: 'Bad format: '+ mac}});
 		   	return
 		}
 		//Save uploaded image
@@ -70,20 +70,13 @@ exports.device_update = (req, res, next) => {
 			if (err){
 				waiting = false;
 				console.log('error:'+err);
-				res.status(400).json({
-			        message: 'Error uploading',
-			        error: err
-	   			});
+				res.status(500).json({error: {message: 'Error uploading', error: err}});
 	   			return
 		    }
 		    //Check image
-		    if(!fs.existsSync(folder+fileName)){
+		    if(req.file == undefined){
 		    	waiting = false;
-				console.log('error:'+err);
-				res.status(400).json({
-			        message: 'Image format not valid',
-			        error: err
-	   			});
+				res.status(400).json({error: {message: 'Image format not valid', error: err}});
 	   			return
 	   		}
 	   		//Image Processing
@@ -92,6 +85,7 @@ exports.device_update = (req, res, next) => {
 	   			console.log('External update starts');
 		    	//Call external program to update device
 		    	updateDevice(mac, folder+fileName)
+		    	//RESULT
 		    	.then(result => {
 		    		waiting = false;
 					res.status(200).json({

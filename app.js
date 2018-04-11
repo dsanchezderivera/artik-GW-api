@@ -31,6 +31,10 @@ app.use((req, res, next) => {
   next();
 });
 
+//Favicon
+app.get('/favicon.ico', function(req, res) {
+    res.sendStatus(204);
+});
 
 //Errors
 app.use((req, res, next) => {
@@ -42,11 +46,7 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   console.log(err);
   res.status(err.status || 500);
-  res.json({
-    error: {
-      message: err.message,
-    }
-  });
+  res.json({error: {message: err.message}});
 });
 
 //Server
