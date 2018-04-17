@@ -41,8 +41,11 @@ exports.devices_get_all = (req, res, next) => {
 		waiting = true;
 		btScan()
 		.then(result => {
+			
 			waiting = false;
-			res.status(200).json(result);
+			result= result.replace("'", '"');
+			console.log(result);
+			res.status(200).json(JSON.parse(result));
 		})
 		.catch(err => {
 			waiting = false;
