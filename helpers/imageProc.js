@@ -27,13 +27,17 @@ function processImage(imagepath, width, height) {
 					count++;
 					if (count == 8) {
 						count = 0;
-						hexmap = hexmap + parseInt(binary, 2).toString(16) + ' ';
+						let hex = parseInt(binary, 2).toString(16);
+						//Add padding to generate hex
+						while (hex.length < 2) {
+					        hex = "0" + hex;
+					    }
+						hexmap = hexmap + hex;
 						binary = '';
 					}
 				}
-				hexmap = hexmap + '\n';
-		    }
-		    //Delete current
+				//hexmap = hexmap + '\n'; //new line each height
+		    }		    //Delete current
 		    fs.unlink(finaltxtpath, (err) => {
 			    if (err) console.log('File Not Found, creating a new one!');
 			    //Save hexmap in txt file	

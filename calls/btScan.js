@@ -5,7 +5,7 @@ const { execFile } = require('child_process');
 function scanBT() {
     return new Promise(function(resolve, reject) {
     	//Execution of external call
-         execFile('node', ['--version'], (error, stdout, stderr) => {
+         execFile('/root/artikscan/artikscan', [], (error, stdout, stderr) => {
 		  if (error) {
 		  	reject(error);
 		  }
@@ -42,7 +42,7 @@ function scanBT() {
 			  ]
 			}
 		  	//resolve(stdout);
-		  	resolve(dummy);
+		  	resolve(stdout);
 		});
     })
 };
