@@ -2,6 +2,7 @@ var express = require("express");
 var app = express();
 const morgan = require('morgan');
 var bodyParser = require("body-parser");
+var config = require('./config.js').get(process.env.NODE_ENV);
 
 //Routes
 const statusRoutes = require('./api/routes/status');
@@ -48,6 +49,7 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.json({error: {message: err.message}});
 });
+
 
 //Server
 var server = app.listen(5000, function () {

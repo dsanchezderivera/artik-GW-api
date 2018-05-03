@@ -1,11 +1,12 @@
 const util = require('util');
 const { execFile } = require('child_process');
+var config = require('../config.js').get(process.env.NODE_ENV);
 
 //Scan BT Devices calling external method and waiting execution
 function scanBT() {
     return new Promise(function(resolve, reject) {
     	//Execution of external call
-         execFile('/root/artikscan/artikscan', [], (error, stdout, stderr) => {
+         execFile(config.scanpath, [], (error, stdout, stderr) => {
 		  if (error) {
 		  	reject(error);
 		  }

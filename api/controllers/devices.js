@@ -45,6 +45,13 @@ exports.devices_get_all = (req, res, next) => {
 			waiting = false;
 			result= result.replace("'", '"');
 			console.log(result);
+			//JSON error handling(only for testing)
+			try {
+				result = JSON.parse(result);
+			} catch (e) {
+				res.status(200).end(result);
+				return
+			}
 			res.status(200).json(JSON.parse(result));
 		})
 		.catch(err => {
@@ -57,7 +64,22 @@ exports.devices_get_all = (req, res, next) => {
 	}
 }
 
-/* PUT */
+/* PUT
+
+EXAMPLE:
+
+PUT /devices/?mac=3DF2C9A6B34F HTTP/1.1
+Host: localhost:5000
+Cache-Control: no-cache
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="image"; filename="image.bmp"
+Content-Type: image/bmp
+
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+*/
 exports.device_update = (req, res, next) => {
 	if(!waiting){
 		waiting = true;
