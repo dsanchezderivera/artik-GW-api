@@ -4,8 +4,8 @@ var config = {
     updatepath: 'whoami'
   },
   default: {
-  	scanpath: '/root/artikscan/artikscan',
-    updatepath: '/root/artik-connect/SEND'
+  	scanpath: '/root/PROGRAMS/ARTIK5-BLE-SCAN/SCAN',
+    updatepath: '/root/PROGRAMS/ARTIK5-BLE-CONNECT/SEND'
   }
 }
 

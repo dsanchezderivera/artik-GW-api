@@ -45,13 +45,6 @@ exports.devices_get_all = (req, res, next) => {
 			waiting = false;
 			result= result.replace("'", '"');
 			console.log(result);
-			//JSON error handling(only for testing)
-			try {
-				result = JSON.parse(result);
-			} catch (e) {
-				res.status(200).end(result);
-				return
-			}
 			res.status(200).json(JSON.parse(result));
 		})
 		.catch(err => {
