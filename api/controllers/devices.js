@@ -118,9 +118,10 @@ exports.device_update = (req, res, next) => {
 				   	});
 				})
 				.catch(err => {
-			      	waiting = false;
+			       waiting = false;
 			      	res.status(500).json({
-			        	message: 'Internal Server Error',
+			      		success: false,
+			        	message: 'Device update failed',
 			        	error: err
 			      	});
 			    });

@@ -8,7 +8,10 @@ function update(mac, image) {
     return new Promise(function(resolve, reject) {
     	//Dummy-Printing node version
         execFile(config.updatepath, [mac], (error, stdout, stderr) => {
-			if (error) reject(error);
+			if (error){
+				console.log(error);
+				reject(stdout); //Include error code from C program
+			} 
 		 	resolve(stdout);
 		});
     })
