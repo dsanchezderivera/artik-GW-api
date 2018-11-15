@@ -10,6 +10,7 @@ function scanBT() {
 		  if (error) {
 		  	reject(error);
 		  }
+console.log("SALIDA DE ERROR: "+ stderr);
 		  //Some dummy data
 		  let dummy= {
 			  "result": true,

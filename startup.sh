@@ -1,3 +1,3 @@
 #!/bin/bash
-cd /root/node/artik-GW-api
+cd /root/PROGRAMS/artik-GW-api
 npm start

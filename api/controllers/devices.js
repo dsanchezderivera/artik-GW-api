@@ -10,7 +10,7 @@ var folder = './Uploads/';
 var fileName = 'image.bmp';
 
 //MAC Validation
-var macRegex = RegExp(/^([0-9A-F]{2}){6}$/);
+var macRegex = RegExp(/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/);
 
 //BLocking
 var waiting = false;
@@ -41,9 +41,7 @@ exports.devices_get_all = (req, res, next) => {
 		waiting = true;
 		btScan()
 		.then(result => {
-			
 			waiting = false;
-			result= result.replace("'", '"');
 			console.log(result);
 			//JSON error handling(only for testing)
 			try {
@@ -52,7 +50,7 @@ exports.devices_get_all = (req, res, next) => {
 				res.status(200).end(result);
 				return
 			}
-			res.status(200).json(JSON.parse(result));
+			res.status(200).json(result);
 		})
 		.catch(err => {
 			waiting = false;
@@ -68,7 +66,7 @@ exports.devices_get_all = (req, res, next) => {
 
 EXAMPLE:
 
-PUT /devices/?mac=3DF2C9A6B34F HTTP/1.1
+PUT /devices/?mac=00:0B:57:0B:E2:62 HTTP/1.1
 Host: localhost:5000
 Cache-Control: no-cache
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
@@ -107,7 +105,7 @@ exports.device_update = (req, res, next) => {
 	   		//Image Processing
 	   		imageProc(folder+fileName, 296, 128)
 	   		.then(ok => {
-	   			console.log('External update starts');
+	   			console.log('External update starts to MAC: '+ mac);
 		    	//Call external program to update device
 		    	updateDevice(mac, folder+fileName)
 		    	//RESULT
@@ -120,9 +118,10 @@ exports.device_update = (req, res, next) => {
 				   	});
 				})
 				.catch(err => {
-			      	waiting = false;
+			       waiting = false;
 			      	res.status(500).json({
-			        	message: 'Internal Server Error',
+			      		success: false,
+			        	message: 'Device update failed',
 			        	error: err
 			      	});
 			    });
