@@ -7,11 +7,11 @@ var config = require('../config.js').get(process.env.NODE_ENV);
 function update(mac, image) {
     return new Promise(function(resolve, reject) {
     	//Dummy-Printing node version
-        execFile(config.updatepath, [mac], (error, stdout, stderr) => {
-			if (error){
+        execFile(config.updatepath, ["-t", mac], (error, stdout, stderr) => {
+			if (stderr){
 				console.log(error);
-				reject(stdout); //Include error code from C program
-			} 
+				reject(stderr); //Include error code from C program
+			}
 		 	resolve(stdout);
 		});
     })
